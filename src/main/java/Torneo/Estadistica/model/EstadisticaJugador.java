@@ -19,16 +19,16 @@ public class EstadisticaJugador {
     private Long id;
 
     @Column(name = "jugador_id",nullable = false)
-    private Long jugadorid;
+    private Long jugadorId;
 
     @Column(name = "partida_id", nullable = false)
-    private Long partidaid;
+    private Long partidaId;
 
-    @Column(name = "parametro_nombre") //kills o goles
-    private String parametroNombre;
+    @Column(nullable = false, length = 50) //kills o goles
+    private String Metrica;
 
-    @Column(name = "parametro_valor")// 6,7, 11
-    private Integer parametroValor;
+    @Column(nullable = false)// 6,7, 11
+    private Integer Valor;
 
 
 }
