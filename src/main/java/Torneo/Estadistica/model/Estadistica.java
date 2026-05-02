@@ -3,7 +3,6 @@ package Torneo.Estadistica.model;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Generated;
 import lombok.NoArgsConstructor;
 
 @Data
@@ -12,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "Estadistica_Jugador")
 
-public class EstadisticaJugador {
+public class Estadistica {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
