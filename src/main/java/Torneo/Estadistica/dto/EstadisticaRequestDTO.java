@@ -26,4 +26,6 @@ public class EstadisticaRequestDTO {
  @NotNull(message = "El valor es obligatorio")
  @PositiveOrZero(message = "El valor no puede ser negativo")
     private Integer Valor;
+
+    private Boolean activo;
 }

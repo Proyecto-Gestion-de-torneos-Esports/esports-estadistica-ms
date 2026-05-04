@@ -26,7 +26,8 @@ public class EstadisticasService {
                 est.getUsuarioId(),
                 est.getPartidaId(),
                 est.getMetrica(),
-                est.getValor()
+                est.getValor(),
+                est.getActivo()
         );
     }
 
@@ -57,7 +58,8 @@ public class EstadisticasService {
                 dto.getJugadorId(),
                 dto.getPartidaId(),
                 dto.getMetrica(),
-                dto.getValor()
+                dto.getValor(),
+                true
         );
 
         EstadisticaResponseDTO respuesta = mapToDTO(estadisticaRepository.save(estadistica));

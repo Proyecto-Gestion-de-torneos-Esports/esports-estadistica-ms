@@ -23,13 +23,13 @@ public class DataInitializer implements CommandLineRunner {
         }
         log.info("DataInitializer: BD vacia detectada. insertando estadisticas de Esports");
             //shooter
-        estadisticaRepository.save(new Estadistica(null, 101L, 500L, "KILLS", 24));
-        estadisticaRepository.save(new Estadistica(null, 101L, 500L, "asistencias",5 ));
-        estadisticaRepository.save(new Estadistica(null, 102L, 500L, "KILLS", 18));
+        estadisticaRepository.save(new Estadistica(null, 103L, 505L, "KIILS",5,true ));
+        estadisticaRepository.save(new Estadistica(null, 101L, 500L, "asistencias",5, true ));
+        estadisticaRepository.save(new Estadistica(null, 102L, 500L, "KILLS", 18 , true));
             //deportivo
-        estadisticaRepository.save(new Estadistica(null, 205L, 850L, "GOLES", 3));
-        estadisticaRepository.save(new Estadistica(null, 205L, 850L, "TIROS_AL_ARCO", 7));
-        estadisticaRepository.save(new Estadistica(null, 208L, 850L, "ATAJADAS", 5));
+        estadisticaRepository.save(new Estadistica(null, 205L, 850L, "GOLES", 3, true ));
+        estadisticaRepository.save(new Estadistica(null, 205L, 850L, "TIROS_AL_ARCO", 7, true));
+        estadisticaRepository.save(new Estadistica(null, 208L, 850L, "ATAJADAS", 5, true));
 
         log.info("DataInitializer: {} estadisticas insertadas correctamente ", estadisticaRepository.count());
     }

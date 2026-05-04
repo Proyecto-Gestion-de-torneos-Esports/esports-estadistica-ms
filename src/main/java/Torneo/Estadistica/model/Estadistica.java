@@ -17,7 +17,7 @@ public class Estadistica {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "usuarip_id",nullable = false)
+    @Column(name = "usuario_id",nullable = false)
     private Long usuarioId;
 
     @Column(name = "partida_id", nullable = false)
@@ -31,5 +31,6 @@ public class Estadistica {
 
     @Column(name = "activo", nullable = false)
     private Boolean activo = true;
+
 
 }

@@ -12,6 +12,6 @@ public class EstadisticaResponseDTO {
     private Long jugadorId;
     private Long partidaId;
     private String metrica;
-    private Integer Valor;
-
+    private Integer valor;
+    private Boolean activo;
 }
