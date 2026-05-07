@@ -8,14 +8,14 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface EstadisticaRepository extends JpaRepository<Estadistica, Long> {
-    //busca todas las estadistiscas de un jugador
-    List<Estadistica> findByJugadorId(long jugadorId);
+    //busca todas las estadistiscas de un usuario
+    List<Estadistica> findByUsuarioId(Long usuarioId);
     // buscar todas estadisticas de una partida en concreto
     List<Estadistica> findByPartidaId(Long partidaId);
 
 
     // query busca una metrica especifica de un jugador en una partida
-    @Query("SELECT e FROM Estadistica  e WHERE  e.usuarioId = :jugadorId AND e.usuarioId = :partidaId")
-    List<Estadistica> findEstadisticaByJugadorIdAndMetrica(@Param("playerId") Long playerId, @Param("partidaId") Long partidaId);
+    @Query("SELECT e FROM Estadistica  e WHERE  e.usuarioId = :usuarioId AND e.usuarioId = :partidaId")
+    List<Estadistica> findEstadisticaByJugadorIdAndMetrica(@Param("usuarioId") Long playerId, @Param("partidaId") Long partidaId);
 
 }

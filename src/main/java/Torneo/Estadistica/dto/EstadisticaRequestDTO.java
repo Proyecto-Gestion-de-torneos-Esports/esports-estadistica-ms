@@ -15,17 +15,18 @@ import javax.crypto.Mac;
 public class EstadisticaRequestDTO {
 
  @NotNull(message = "El ID  del jugador  es obligatorio ")
-    private Long jugadorId;
+    private Long usuarioId;
 
  @NotNull(message = "El ID de la partida es obligatorio")
     private Long partidaId;
 
  @NotBlank(message = "La metrica no puede estar vacia")
-    private String Metrica;
+    private String metrica;
 
  @NotNull(message = "El valor es obligatorio")
  @PositiveOrZero(message = "El valor no puede ser negativo")
-    private Integer Valor;
+    private Integer valor;
 
+ @NotNull(message = "El campo activo es obligatorio")
     private Boolean activo;
 }

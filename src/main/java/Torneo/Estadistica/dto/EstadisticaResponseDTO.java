@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class EstadisticaResponseDTO {
     private Long id;
-    private Long jugadorId;
+    private Long usuarioId;
     private Long partidaId;
     private String metrica;
     private Integer valor;

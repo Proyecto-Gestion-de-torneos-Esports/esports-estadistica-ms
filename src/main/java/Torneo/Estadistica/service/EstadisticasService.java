@@ -55,7 +55,7 @@ public class EstadisticasService {
     public EstadisticaResponseDTO guardar(EstadisticaRequestDTO dto) {
         Estadistica estadistica = new Estadistica(
                 null,
-                dto.getJugadorId(),
+                dto.getUsuarioId(),
                 dto.getPartidaId(),
                 dto.getMetrica(),
                 dto.getValor(),
@@ -64,7 +64,7 @@ public class EstadisticasService {
 
         EstadisticaResponseDTO respuesta = mapToDTO(estadisticaRepository.save(estadistica));
         log.info("Estadistica '{}'(Valor: {}) registrada correctamente ID: {}",
-                dto.getMetrica(), dto.getValor(), dto.getJugadorId());
+                dto.getMetrica(), dto.getValor(), dto.getUsuarioId());
         return respuesta;
 
     }
@@ -74,7 +74,7 @@ public class EstadisticasService {
         return estadisticaRepository.findById(id).map(existente -> {
             log.info("Estadistica con ID: {} encontrada. Actualizando sus valores", id);
 
-            existente.setUsuarioId(dto.getJugadorId());
+            existente.setUsuarioId(dto.getUsuarioId());
             existente.setPartidaId(dto.getPartidaId());
             existente.setMetrica(dto.getMetrica());
             existente.setValor(dto.getValor());

@@ -23,7 +23,7 @@ public class DataInitializer implements CommandLineRunner {
         }
         log.info("DataInitializer: BD vacia detectada. insertando estadisticas de Esports");
             //shooter
-        estadisticaRepository.save(new Estadistica(null, 103L, 505L, "KIILS",5,true ));
+        estadisticaRepository.save(new Estadistica(null, 103L, 505L, "KILLS",5,true ));
         estadisticaRepository.save(new Estadistica(null, 101L, 500L, "asistencias",5, true ));
         estadisticaRepository.save(new Estadistica(null, 102L, 500L, "KILLS", 18 , true));
             //deportivo
