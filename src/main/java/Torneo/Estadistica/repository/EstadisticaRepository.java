@@ -16,6 +16,6 @@ public interface EstadisticaRepository extends JpaRepository<Estadistica, Long> 
 
     // query busca una metrica especifica de un jugador en una partida
     @Query("SELECT e FROM Estadistica  e WHERE  e.usuarioId = :usuarioId AND e.usuarioId = :partidaId")
-    List<Estadistica> findEstadisticaByJugadorIdAndMetrica(@Param("usuarioId") Long playerId, @Param("partidaId") Long partidaId);
+    List<Estadistica> findEstadisticaByUsuarioIdAndMetrica(@Param("usuarioId") Long usuarioId, @Param("partidaId") Long partidaId);
 
 }

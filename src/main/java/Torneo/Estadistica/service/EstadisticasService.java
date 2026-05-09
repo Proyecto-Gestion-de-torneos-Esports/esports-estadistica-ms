@@ -88,7 +88,7 @@ public class EstadisticasService {
 
     @Transactional
     public void eliminar(Long id){
-        log.info("Procesando solicitud para eliminar permannentemente la estadistica con ID {} ", id );
+        log.info("Procesando solicitud para eliminar permanentemente la estadistica con ID {} ", id );
         estadisticaRepository.findById(id).ifPresentOrElse(existente -> {
             estadisticaRepository.delete(existente);
             log.info("la estadistica ID: {} fue eliminada correctamente de la base de datos", id);
