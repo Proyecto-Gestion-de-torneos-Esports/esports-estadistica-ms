@@ -1,7 +1,9 @@
 package Torneo.Estadistica.service;
 
-import Torneo.Estadistica.dto.EstadisticaRequestDTO;
-import Torneo.Estadistica.dto.EstadisticaResponseDTO;
+import Torneo.Estadistica.client.AuditoriaClient;
+import Torneo.Estadistica.client.PartidaClient;
+import Torneo.Estadistica.client.UsuarioClient;
+import Torneo.Estadistica.dto.*;
 import Torneo.Estadistica.model.Estadistica;
 import Torneo.Estadistica.repository.EstadisticaRepository;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -16,13 +19,16 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class EstadisticasService {
+public class EstadisticaService {
 
     private final EstadisticaRepository estadisticaRepository;
+    private final AuditoriaClient auditoriaClient;
+    private final PartidaClient partidaClient;
+    private final UsuarioClient usuarioClient;
 
     private EstadisticaResponseDTO mapToDTO(Estadistica est) {
         return new EstadisticaResponseDTO(
-                est.getId(),
+                est.getEstadistica_id(),
                 est.getUsuarioId(),
                 est.getPartidaId(),
                 est.getMetrica(),
@@ -30,6 +36,7 @@ public class EstadisticasService {
                 est.getActivo()
         );
     }
+
 
     @Transactional(readOnly = true)
     public List<EstadisticaResponseDTO> obtenertodas() {
@@ -52,22 +59,31 @@ public class EstadisticasService {
     }
 
     @Transactional
-    public EstadisticaResponseDTO guardar(EstadisticaRequestDTO dto) {
-        Estadistica estadistica = new Estadistica(
-                null,
-                dto.getUsuarioId(),
-                dto.getPartidaId(),
-                dto.getMetrica(),
-                dto.getValor(),
-                true
-        );
+    public EstadisticaResponseDTO registrarEstadistica(EstadisticaRequestDTO dto) {
+        log.info("Registrando métrica '{}' para el usuario ID: {} en la partida ID: {}",
+                dto.getMetrica(), dto.getUsuarioId(), dto.getPartidaId());
 
-        EstadisticaResponseDTO respuesta = mapToDTO(estadisticaRepository.save(estadistica));
-        log.info("Estadistica '{}'(Valor: {}) registrada correctamente ID: {}",
-                dto.getMetrica(), dto.getValor(), dto.getUsuarioId());
-        return respuesta;
+        //  Validación
+        usuarioClient.obtenerUsuarioPorId(dto.getUsuarioId());
+        partidaClient.obtenerPartidaPorId(dto.getPartidaId());
+
+        // map
+        Estadistica estadistica = new Estadistica();
+
+        estadistica.setUsuarioId(dto.getUsuarioId());
+        estadistica.setPartidaId(dto.getPartidaId());
+        estadistica.setMetrica(dto.getMetrica());
+        estadistica.setValor(dto.getValor());
+        estadistica.setActivo(true);
+
+        // Guardado
+        Estadistica guardada = estadisticaRepository.save(estadistica);
+        log.info("Estadística guardada correctamente con ID: {}", guardada.getEstadistica_id());
+
+        return mapToDTO(guardada);
 
     }
+
 
     @Transactional
     public Optional <EstadisticaResponseDTO> actualizar(Long id, EstadisticaRequestDTO dto) {
@@ -81,6 +97,7 @@ public class EstadisticasService {
 
             EstadisticaResponseDTO respuesta = mapToDTO((estadisticaRepository.save(existente)));
             log.info("La estadistica ID: {} fue encontrada correctamente ", id);
+            generarAuditoria("Se actualizo estadistica");
             return respuesta;
         });
 
@@ -92,9 +109,19 @@ public class EstadisticasService {
         estadisticaRepository.findById(id).ifPresentOrElse(existente -> {
             estadisticaRepository.delete(existente);
             log.info("la estadistica ID: {} fue eliminada correctamente de la base de datos", id);
+            generarAuditoria("Se elimino ID estadistica");
         }, ()-> {
             log.warn("Intento de eliminacion fallido: no se encontro estadistica con el ID {}", id );
         });
+    }
+
+    public void generarAuditoria(String detalle){
+        AuditoriaRequestDTO dto = new AuditoriaRequestDTO();
+        LocalDate ahora = LocalDate.now();
+        dto.setDetalle(detalle);
+        dto.setFecha(ahora);
+
+        AuditoriaResponseDTO respuesta = auditoriaClient.generarAuditoria(dto);
     }
 
 }

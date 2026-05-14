@@ -15,7 +15,7 @@ public class Estadistica {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long estadistica_id;
 
     @Column(name = "usuario_id",nullable = false)
     private Long usuarioId;

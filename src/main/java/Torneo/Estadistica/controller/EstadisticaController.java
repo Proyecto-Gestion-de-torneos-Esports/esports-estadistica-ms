@@ -2,7 +2,7 @@ package Torneo.Estadistica.controller;
 
 import Torneo.Estadistica.dto.EstadisticaRequestDTO;
 import Torneo.Estadistica.dto.EstadisticaResponseDTO;
-import Torneo.Estadistica.service.EstadisticasService;
+import Torneo.Estadistica.service.EstadisticaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,28 +15,28 @@ import java.util.List;
 @RequestMapping("/api/estadistica")
 @RequiredArgsConstructor
 public class EstadisticaController {
-    private final EstadisticasService estadisticasService;
+    private final EstadisticaService estadisticaService;
 
     @GetMapping
     public ResponseEntity<List<EstadisticaResponseDTO>> obtenerTodas(){
-        return ResponseEntity.ok(estadisticasService.obtenertodas());
+        return ResponseEntity.ok(estadisticaService.obtenertodas());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<EstadisticaResponseDTO> obtenerPorId(@PathVariable Long id){
-        return estadisticasService.obtenerPorId(id)
+        return estadisticaService.obtenerPorId(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
     public ResponseEntity<EstadisticaResponseDTO> crear (@Valid @RequestBody EstadisticaRequestDTO dto ) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(estadisticasService.guardar(dto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(estadisticaService.registrarEstadistica(dto));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<EstadisticaResponseDTO> actualizar (@PathVariable Long id, @Valid @RequestBody EstadisticaRequestDTO dto){
-        return estadisticasService.actualizar(id, dto)
+        return estadisticaService.actualizar(id, dto)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
 
@@ -44,10 +44,10 @@ public class EstadisticaController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id ) {
-        if (estadisticasService.obtenerPorId(id).isEmpty()){
+        if (estadisticaService.obtenerPorId(id).isEmpty()){
             return ResponseEntity.notFound().build();
         }
-        estadisticasService.eliminar(id);
+        estadisticaService.eliminar(id);
 
         return ResponseEntity.noContent().build();
     }

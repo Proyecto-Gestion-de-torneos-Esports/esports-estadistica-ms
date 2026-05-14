@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EstadisticaResponseDTO {
-    private Long id;
+    private Long estadistica_id;
     private Long usuarioId;
     private Long partidaId;
     private String metrica;
