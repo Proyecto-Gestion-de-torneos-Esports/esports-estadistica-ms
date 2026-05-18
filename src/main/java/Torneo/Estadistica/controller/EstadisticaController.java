@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/estadistica")
+@RequestMapping("/api/estadisticas")
 @RequiredArgsConstructor
 public class EstadisticaController {
     private final EstadisticaService estadisticaService;
@@ -22,7 +22,7 @@ public class EstadisticaController {
         return ResponseEntity.ok(estadisticaService.obtenertodas());
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<EstadisticaResponseDTO> obtenerPorId(@PathVariable Long id){
         return estadisticaService.obtenerPorId(id)
                 .map(ResponseEntity::ok)

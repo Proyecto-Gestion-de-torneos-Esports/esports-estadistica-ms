@@ -7,8 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.crypto.Mac;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,7 +16,7 @@ public class EstadisticaRequestDTO {
     private Long usuarioId;
 
  @NotNull(message = "El ID de la partida es obligatorio")
-    private Long partidaId;
+    private Long partidasTorneoId;
 
  @NotBlank(message = "La metrica no puede estar vacia")
     private String metrica;

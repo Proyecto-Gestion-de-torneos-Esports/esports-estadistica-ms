@@ -28,9 +28,9 @@ public class EstadisticaService {
 
     private EstadisticaResponseDTO mapToDTO(Estadistica est) {
         return new EstadisticaResponseDTO(
-                est.getEstadistica_id(),
+                est.getEstadisticaId(),
                 est.getUsuarioId(),
-                est.getPartidaId(),
+                est.getPartidasTorneoId(),
                 est.getMetrica(),
                 est.getValor(),
                 est.getActivo()
@@ -61,24 +61,24 @@ public class EstadisticaService {
     @Transactional
     public EstadisticaResponseDTO registrarEstadistica(EstadisticaRequestDTO dto) {
         log.info("Registrando métrica '{}' para el usuario ID: {} en la partida ID: {}",
-                dto.getMetrica(), dto.getUsuarioId(), dto.getPartidaId());
+                dto.getMetrica(), dto.getUsuarioId(), dto.getPartidasTorneoId());
 
         //  Validación
         usuarioClient.obtenerUsuarioPorId(dto.getUsuarioId());
-        partidaClient.obtenerPartidaPorId(dto.getPartidaId());
+        partidaClient.obtenerPartidaPorId(dto.getPartidasTorneoId());
 
         // map
         Estadistica estadistica = new Estadistica();
 
         estadistica.setUsuarioId(dto.getUsuarioId());
-        estadistica.setPartidaId(dto.getPartidaId());
+        estadistica.setPartidasTorneoId(dto.getPartidasTorneoId());
         estadistica.setMetrica(dto.getMetrica());
         estadistica.setValor(dto.getValor());
         estadistica.setActivo(true);
 
         // Guardado
         Estadistica guardada = estadisticaRepository.save(estadistica);
-        log.info("Estadística guardada correctamente con ID: {}", guardada.getEstadistica_id());
+        log.info("Estadística guardada correctamente con ID: {}", guardada.getEstadisticaId());
 
         return mapToDTO(guardada);
 
@@ -91,7 +91,7 @@ public class EstadisticaService {
             log.info("Estadistica con ID: {} encontrada. Actualizando sus valores", id);
 
             existente.setUsuarioId(dto.getUsuarioId());
-            existente.setPartidaId(dto.getPartidaId());
+            existente.setPartidasTorneoId(dto.getPartidasTorneoId());
             existente.setMetrica(dto.getMetrica());
             existente.setValor(dto.getValor());
 

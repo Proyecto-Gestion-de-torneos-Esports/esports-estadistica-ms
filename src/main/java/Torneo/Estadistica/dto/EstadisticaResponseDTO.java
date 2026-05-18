@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EstadisticaResponseDTO {
-    private Long estadistica_id;
+    private Long estadisticaId;
     private Long usuarioId;
-    private Long partidaId;
+    private Long partidasTorneoId;
     private String metrica;
     private Integer valor;
     private Boolean activo;

@@ -15,13 +15,14 @@ public class Estadistica {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long estadistica_id;
+    @Column(name = "estadistica_id", nullable = false)
+    private Long estadisticaId;
 
     @Column(name = "usuario_id",nullable = false)
     private Long usuarioId;
 
-    @Column(name = "partida_id", nullable = false)
-    private Long partidaId;
+    @Column(name = "partidas_torneo_id", nullable = false)
+    private Long partidasTorneoId;
 
     @Column(nullable = false, length = 50) //kills o goles
     private String metrica;
