@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+
 public class EstadisticaService {
 
     private final EstadisticaRepository estadisticaRepository;
@@ -41,9 +42,11 @@ public class EstadisticaService {
     @Transactional(readOnly = true)
     public List<EstadisticaResponseDTO> obtenertodas() {
         log.info("listando todas las estadisticas");
-        List<Estadistica> estadisticas = estadisticaRepository.findAll();
-        log.info("hay {} registros de estadisticas en total", estadisticas.size());
-        return estadisticas.stream().map(this::mapToDTO).collect(Collectors.toList());
+        List<Estadistica> estadisticasActivas = estadisticaRepository.findAll().stream()
+                .filter(Estadistica::getActivo)
+                .toList();
+        log.info("Hay {} registros de estadísticas activas en total", estadisticasActivas.size());
+        return estadisticasActivas.stream().map(this::mapToDTO).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
@@ -79,7 +82,7 @@ public class EstadisticaService {
         // Guardado
         Estadistica guardada = estadisticaRepository.save(estadistica);
         log.info("Estadística guardada correctamente con ID: {}", guardada.getEstadisticaId());
-
+        generarAuditoria("se guardo estadistica");
         return mapToDTO(guardada);
 
     }
@@ -89,6 +92,10 @@ public class EstadisticaService {
     public Optional <EstadisticaResponseDTO> actualizar(Long id, EstadisticaRequestDTO dto) {
         return estadisticaRepository.findById(id).map(existente -> {
             log.info("Estadistica con ID: {} encontrada. Actualizando sus valores", id);
+
+            usuarioClient.obtenerUsuarioPorId(dto.getUsuarioId());
+            partidaClient.obtenerPartidaPorId(dto.getPartidasTorneoId());
+
 
             existente.setUsuarioId(dto.getUsuarioId());
             existente.setPartidasTorneoId(dto.getPartidasTorneoId());
@@ -105,14 +112,15 @@ public class EstadisticaService {
 
     @Transactional
     public void eliminar(Long id){
-        log.info("Procesando solicitud para eliminar permanentemente la estadistica con ID {} ", id );
-        estadisticaRepository.findById(id).ifPresentOrElse(existente -> {
-            estadisticaRepository.delete(existente);
-            log.info("la estadistica ID: {} fue eliminada correctamente de la base de datos", id);
-            generarAuditoria("Se elimino ID estadistica");
-        }, ()-> {
-            log.warn("Intento de eliminacion fallido: no se encontro estadistica con el ID {}", id );
-        });
+        log.info("Procesando solicitud de borrado lógico para la estadística ID: {}", id);
+
+        Estadistica existente = estadisticaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Intento de eliminación fallido: no se encontró estadística con el ID: " + id));
+        existente.setActivo(false);
+        estadisticaRepository.save(existente);
+
+        log.info("La estadística ID: {} fue desactivada correctamente", id);
+        generarAuditoria("Se eliminó estadística");
     }
 
     public void generarAuditoria(String detalle){

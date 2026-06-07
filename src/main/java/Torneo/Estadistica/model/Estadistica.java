@@ -27,11 +27,12 @@ public class Estadistica {
     @Column(nullable = false, length = 50) //kills o goles
     private String metrica;
 
-    @Column(nullable = false)// 6,7, 11
+    @Column(nullable = false)
     private Integer valor;
 
     @Column(name = "activo", nullable = false)
     private Boolean activo = true;
 
+    
 
 }
