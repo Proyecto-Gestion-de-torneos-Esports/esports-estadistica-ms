@@ -24,9 +24,7 @@ public class EstadisticaController {
 
     @GetMapping("/{id}")
     public ResponseEntity<EstadisticaResponseDTO> obtenerPorId(@PathVariable Long id){
-        return estadisticaService.obtenerPorId(id)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        return ResponseEntity.ok(estadisticaService.obtenerPorId(id));
     }
 
     @PostMapping
@@ -36,19 +34,13 @@ public class EstadisticaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<EstadisticaResponseDTO> actualizar (@PathVariable Long id, @Valid @RequestBody EstadisticaRequestDTO dto){
-        return estadisticaService.actualizar(id, dto)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        return ResponseEntity.ok(estadisticaService.actualizar(id, dto));
 
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id ) {
-        if (estadisticaService.obtenerPorId(id).isEmpty()){
-            return ResponseEntity.notFound().build();
-        }
         estadisticaService.eliminar(id);
-
         return ResponseEntity.noContent().build();
     }
 }

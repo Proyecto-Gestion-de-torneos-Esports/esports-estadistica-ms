@@ -50,14 +50,11 @@ public class EstadisticaService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<EstadisticaResponseDTO> obtenerPorId(Long id) {
-        Optional<EstadisticaResponseDTO> resultado = estadisticaRepository.findById(id).map(this::mapToDTO);
-
-        resultado.ifPresentOrElse(
-                dto -> log.info("Estadisticas ID '{}' encontrada correctamente", id),
-                () -> log.warn("No se encontro ninguna estadistica con el ID: {}", id)
-        );
-        return resultado;
+    public EstadisticaResponseDTO obtenerPorId(Long id) {
+        log.info("buscando estadistica con ID: {}",id);
+        return estadisticaRepository.findById(id)
+                .map(this::mapToDTO)
+                .orElseThrow(() -> new RuntimeException("No se encontro ninguna estadistica con ID {}"+ id));
 
     }
 
@@ -89,24 +86,22 @@ public class EstadisticaService {
 
 
     @Transactional
-    public Optional <EstadisticaResponseDTO> actualizar(Long id, EstadisticaRequestDTO dto) {
-        return estadisticaRepository.findById(id).map(existente -> {
-            log.info("Estadistica con ID: {} encontrada. Actualizando sus valores", id);
+    public EstadisticaResponseDTO actualizar(Long id, EstadisticaRequestDTO dto) {
+        Estadistica estadistica = estadisticaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("No se encontró ninguna estadística con el ID: " + id));
 
-            usuarioClient.obtenerUsuarioPorId(dto.getUsuarioId());
-            partidaClient.obtenerPartidaPorId(dto.getPartidasTorneoId());
+        usuarioClient.obtenerUsuarioPorId(dto.getUsuarioId());
+        partidaClient.obtenerPartidaPorId(dto.getPartidasTorneoId());
 
+        estadistica.setUsuarioId(dto.getUsuarioId());
+        estadistica.setPartidasTorneoId(dto.getPartidasTorneoId());
+        estadistica.setMetrica(dto.getMetrica());
+        estadistica.setValor(dto.getValor());
+        estadistica.setActivo(dto.getActivo());
 
-            existente.setUsuarioId(dto.getUsuarioId());
-            existente.setPartidasTorneoId(dto.getPartidasTorneoId());
-            existente.setMetrica(dto.getMetrica());
-            existente.setValor(dto.getValor());
+        Estadistica actualizada = estadisticaRepository.save(estadistica);
 
-            EstadisticaResponseDTO respuesta = mapToDTO((estadisticaRepository.save(existente)));
-            log.info("La estadistica ID: {} fue encontrada correctamente ", id);
-            generarAuditoria("Se actualizo estadistica");
-            return respuesta;
-        });
+        return mapToDTO(actualizada);
 
     }
 
