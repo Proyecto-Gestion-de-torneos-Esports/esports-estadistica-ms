@@ -100,7 +100,8 @@ public class EstadisticaService {
         estadistica.setActivo(dto.getActivo());
 
         Estadistica actualizada = estadisticaRepository.save(estadistica);
-
+        log.info("La estadística ID: {} fue actualizada correctamente", id);
+        generarAuditoria("Se actualizo estadistica");
         return mapToDTO(actualizada);
 
     }
@@ -113,8 +114,6 @@ public class EstadisticaService {
                 .orElseThrow(() -> new RuntimeException("Intento de eliminación fallido: no se encontró estadística con el ID: " + id));
         existente.setActivo(false);
         estadisticaRepository.save(existente);
-
-        log.info("La estadística ID: {} fue desactivada correctamente", id);
         generarAuditoria("Se eliminó estadística");
     }
 
