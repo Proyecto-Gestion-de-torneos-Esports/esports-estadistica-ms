@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class UsuarioResponseDTO {
-    private Long usuarioId;
+    private Long idUsuario;
     private String nombreUsuario;
 }
